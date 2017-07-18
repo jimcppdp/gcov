@@ -1,18 +1,31 @@
 all: cov run
 	@echo Coverage ...
-	gcov cov.c
+	gcov cov.cpp
 	@echo Done
-	cat cov.c.gcov
+	cat cov.cpp.gcov
 
-cov: cov.c
+cov: cov.cpp
 	@echo Compiling ...
-	gcc -o $@ -Wall -fprofile-arcs -ftest-coverage $^
+	g++ -o $@ -Wall -fprofile-arcs -ftest-coverage $^
 	@echo Done
+
+ccov: cov.c
+	@echo Compiling c version ...
+	gcc -o cov -Wall -fprofile-arcs -ftest-coverage $^
+	@echo Done
+
+c: ccov run coverage
 
 run: 
 	@echo Run ...
 	cov
 	@echo Done
+
+coverage: 
+	@echo Coverage c version...
+	gcov cov.c
+	@echo Done
+	cat cov.c.gcov
 
 clean:
 	@echo Clean ...
